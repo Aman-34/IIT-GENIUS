@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Institutes of Technology - Portfolio</title>
+    <style>
+        :root {
+            --primary: #006064;
+            --secondary: #00838f;
+            --accent: #4fb3bf;
+            --light: #e0f7fa;
+            --dark: #002f33;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .search-filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        #search {
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--accent);
+            border-radius: 30px;
+            width: 300px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        #search:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.2);
+        }
+        
+        .filter-btn {
+            background-color: white;
+            border: 2px solid var(--accent);
+            color: var(--dark);
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .iit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .iit-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .iit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .card-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .established {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .location {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .location svg {
+            margin-right: 0.5rem;
+            fill: currentColor;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .specialization {
+            margin-bottom: 1rem;
+        }
+        
+        .specialization h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .specialization ul {
+            list-style-type: none;
+        }
+        
+        .specialization li {
+            padding: 0.3rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .specialization li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+        
+        .advantages h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .advantages p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: var(--light);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            background-color: var(--dark);
+            color: white;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .iit-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            #search {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Indian Institutes of Technology</h1>
+        <p class="subtitle">Premier Engineering Institutions of India</p>
+    </header>
+    
+    <div class="container">
+        <div class="search-filter">
+            <input type="text" id="search" placeholder="Search IITs by name, location or specialization...">
+            <div>
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="old">Original IITs</button>
+                <button class="filter-btn" data-filter="new">New IITs</button>
+            </div>
+        </div>
+        
+        <div class="iit-grid" id="iitContainer">
+            <!-- IIT Kharagpur -->
+            <div class="iit-card" data-category="old">
+                <div class="card-header">
+                    <h2>IIT Kharagpur</h2>
+                    <div class="established">Established: 1951</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Kharagpur, West Bengal
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Engineering and Technology</li>
+                            <li>Management</li>
+                            <li>Law</li>
+                            <li>Architecture</li>
+                            <li>Medical Science</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>First and largest IIT with the most diverse academic programs. Known for its strong alumni network and research output.</p>
+                        <span class="tag">Oldest IIT</span>
+                        <span class="tag">Largest Campus</span>
+                        <span class="tag">Diverse Programs</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Bombay -->
+            <div class="iit-card" data-category="old">
+                <div class="card-header">
+                    <h2>IIT Bombay</h2>
+                    <div class="established">Established: 1958</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Mumbai, Maharashtra
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Computer Science</li>
+                            <li>Electrical Engineering</li>
+                            <li>Mechanical Engineering</li>
+                            <li>Design</li>
+                            <li>Entrepreneurship</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Located in India's financial capital with excellent industry connections. Strong focus on innovation and startups.</p>
+                        <span class="tag">Financial Hub</span>
+                        <span class="tag">Startup Culture</span>
+                        <span class="tag">Top Placements</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Madras -->
+            <div class="iit-card" data-category="old">
+                <div class="card-header">
+                    <h2>IIT Madras</h2>
+                    <div class="established">Established: 1959</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Chennai, Tamil Nadu
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Ocean Engineering</li>
+                            <li>Biotechnology</li>
+                            <li>Data Science</li>
+                            <li>Renewable Energy</li>
+                            <li>Quantitative Finance</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Strong research focus with beautiful campus adjacent to Guindy National Park. Excellent incubation center for startups.</p>
+                        <span class="tag">Research Focus</span>
+                        <span class="tag">Natural Campus</span>
+                        <span class="tag">Incubation Hub</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Kanpur -->
+            <div class="iit-card" data-category="old">
+                <div class="card-header">
+                    <h2>IIT Kanpur</h2>
+                    <div class="established">Established: 1959</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Kanpur, Uttar Pradesh
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Aerospace Engineering</li>
+                            <li>Material Science</li>
+                            <li>Artificial Intelligence</li>
+                            <li>Nuclear Engineering</li>
+                            <li>Cognitive Science</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Pioneer in computer education in India. Strong focus on fundamental sciences and engineering with excellent research facilities.</p>
+                        <span class="tag">Tech Pioneer</span>
+                        <span class="tag">Strong Sciences</span>
+                        <span class="tag">Research Facilities</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Delhi -->
+            <div class="iit-card" data-category="old">
+                <div class="card-header">
+                    <h2>IIT Delhi</h2>
+                    <div class="established">Established: 1961</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        New Delhi
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Textile Engineering</li>
+                            <li>Energy Studies</li>
+                            <li>Public Policy</li>
+                            <li>Biomedical Engineering</li>
+                            <li>Urban Infrastructure</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Located in the national capital with strong government and industry connections. Excellent placement records and international collaborations.</p>
+                        <span class="tag">Capital Location</span>
+                        <span class="tag">Policy Influence</span>
+                        <span class="tag">Global Collaborations</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Guwahati -->
+            <div class="iit-card" data-category="old">
+                <div class="card-header">
+                    <h2>IIT Guwahati</h2>
+                    <div class="established">Established: 1994</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Guwahati, Assam
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Petroleum Engineering</li>
+                            <li>Environmental Science</li>
+                            <li>Design</li>
+                            <li>Biosciences</li>
+                            <li>Hydrocarbon Studies</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Beautiful campus on the banks of Brahmaputra river. Focus on Northeast-specific technologies and environmental studies.</p>
+                        <span class="tag">Scenic Campus</span>
+                        <span class="tag">Regional Focus</span>
+                        <span class="tag">Environmental Tech</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Roorkee -->
+            <div class="iit-card" data-category="old">
+                <div class="card-header">
+                    <h2>IIT Roorkee</h2>
+                    <div class="established">Established: 1847 (as Thomason College), IIT in 2001</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Roorkee, Uttarakhand
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Earthquake Engineering</li>
+                            <li>Water Resources</li>
+                            <li>Hydropower</li>
+                            <li>Geomatics</li>
+                            <li>Paper Technology</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>One of the oldest technical institutions in Asia with strong civil engineering heritage. Excellent infrastructure for water and earthquake research.</p>
+                        <span class="tag">Historic</span>
+                        <span class="tag">Civil Engineering</span>
+                        <span class="tag">Disaster Research</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Bhubaneswar -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Bhubaneswar</h2>
+                    <div class="established">Established: 2008</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Bhubaneswar, Odisha
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Climate Studies</li>
+                            <li>Mineral Engineering</li>
+                            <li>Infrastructure Engineering</li>
+                            <li>Applied Geology</li>
+                            <li>Renewable Energy</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Focus on climate change and sustainable technologies. Strong emphasis on mineral resources relevant to Odisha's economy.</p>
+                        <span class="tag">Sustainability</span>
+                        <span class="tag">Mineral Tech</span>
+                        <span class="tag">Emerging</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Gandhinagar -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Gandhinagar</h2>
+                    <div class="established">Established: 2008</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Gandhinagar, Gujarat
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Cognitive Science</li>
+                            <li>Biological Engineering</li>
+                            <li>Materials Engineering</li>
+                            <li>Cultural Studies</li>
+                            <li>Earth System Science</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Liberal arts approach within technical education. Strong interdisciplinary focus and emphasis on holistic education.</p>
+                        <span class="tag">Interdisciplinary</span>
+                        <span class="tag">Liberal Arts</span>
+                        <span class="tag">Innovative</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Hyderabad -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Hyderabad</h2>
+                    <div class="established">Established: 2008</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Hyderabad, Telangana
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Artificial Intelligence</li>
+                            <li>Biomedical Engineering</li>
+                            <li>Creative Technologies</li>
+                            <li>Materials Science</li>
+                            <li>Quantum Technology</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Strong focus on emerging technologies and research. Located in Hyderabad's tech hub with excellent industry connections.</p>
+                        <span class="tag">Emerging Tech</span>
+                        <span class="tag">Research Focus</span>
+                        <span class="tag">Tech Hub</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Jodhpur -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Jodhpur</h2>
+                    <div class="established">Established: 2008</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Jodhpur, Rajasthan
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Cyber Physical Systems</li>
+                            <li>Data Science</li>
+                            <li>Smart Manufacturing</li>
+                            <li>Photovoltaics</li>
+                            <li>Desert Studies</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Focus on technologies relevant to arid regions. Strong emphasis on data science and smart systems.</p>
+                        <span class="tag">Arid Tech</span>
+                        <span class="tag">Data Science</span>
+                        <span class="tag">Smart Systems</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Patna -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Patna</h2>
+                    <div class="established">Established: 2008</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Patna, Bihar
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Agricultural Engineering</li>
+                            <li>River Engineering</li>
+                            <li>Disaster Management</li>
+                            <li>Nanotechnology</li>
+                            <li>Computational Biology</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Focus on technologies relevant to Bihar's agricultural economy and flood management. Strong computational programs.</p>
+                        <span class="tag">Agricultural Tech</span>
+                        <span class="tag">Flood Management</span>
+                        <span class="tag">Computational Focus</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Ropar -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Ropar</h2>
+                    <div class="established">Established: 2008</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Rupnagar, Punjab
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Energy Engineering</li>
+                            <li>Metallurgical Engineering</li>
+                            <li>Hydroinformatics</li>
+                            <li>Computational Mechanics</li>
+                            <li>Advanced Materials</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Strong focus on energy technologies and materials science. Located in Punjab's industrial belt with good industry connections.</p>
+                        <span class="tag">Energy Tech</span>
+                        <span class="tag">Materials Science</span>
+                        <span class="tag">Industrial Links</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Indore -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Indore</h2>
+                    <div class="established">Established: 2009</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Indore, Madhya Pradesh
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Astronomy</li>
+                            <li>Atmospheric Science</li>
+                            <li>Disaster Preparedness</li>
+                            <li>Bioengineering</li>
+                            <li>Smart Infrastructure</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Strong programs in astronomy and atmospheric sciences. Focus on disaster preparedness technologies.</p>
+                        <span class="tag">Space Science</span>
+                        <span class="tag">Disaster Tech</span>
+                        <span class="tag">Emerging Programs</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Mandi -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Mandi</h2>
+                    <div class="established">Established: 2009</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Mandi, Himachal Pradesh
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Snow & Avalanche Studies</li>
+                            <li>Hydroelectric Power</li>
+                            <li>Advanced Computing</li>
+                            <li>Mountain Agriculture</li>
+                            <li>Sustainable Architecture</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Focus on technologies relevant to Himalayan region. Strong programs in hydroelectric power and mountain agriculture.</p>
+                        <span class="tag">Himalayan Tech</span>
+                        <span class="tag">Hydro Power</span>
+                        <span class="tag">Mountain Studies</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT (BHU) Varanasi -->
+            <div class="iit-card" data-category="old">
+                <div class="card-header">
+                    <h2>IIT (BHU) Varanasi</h2>
+                    <div class="established">Established: 1919 (as BHU), IIT in 2012</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Varanasi, Uttar Pradesh
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Pharmaceutical Engineering</li>
+                            <li>Ceramic Engineering</li>
+                            <li>Mining Engineering</li>
+                            <li>Metallurgical Engineering</li>
+                            <li>Religious Studies</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Strong heritage with unique programs in ceramic and pharmaceutical engineering. Located in India's spiritual capital.</p>
+                        <span class="tag">Heritage</span>
+                        <span class="tag">Unique Programs</span>
+                        <span class="tag">Spiritual Hub</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Palakkad -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Palakkad</h2>
+                    <div class="established">Established: 2015</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Palakkad, Kerala
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Climate Science</li>
+                            <li>Water Resources</li>
+                            <li>Sustainable Energy</li>
+                            <li>Marine Technology</li>
+                            <li>Heritage Conservation</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Focus on sustainable technologies and climate science. Strong emphasis on water resources and marine technologies.</p>
+                        <span class="tag">Sustainability</span>
+                        <span class="tag">Water Tech</span>
+                        <span class="tag">Marine Focus</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Tirupati -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Tirupati</h2>
+                    <div class="established">Established: 2015</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Tirupati, Andhra Pradesh
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Smart Manufacturing</li>
+                            <li>Energy Storage</li>
+                            <li>Computational Engineering</li>
+                            <li>Advanced Materials</li>
+                            <li>Heritage Science</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Focus on smart manufacturing and energy storage technologies. Located near India's famous temple town.</p>
+                        <span class="tag">Smart Manufacturing</span>
+                        <span class="tag">Energy Storage</span>
+                        <span class="tag">Temple Town</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Dhanbad (ISM) -->
+            <div class="iit-card" data-category="old">
+                <div class="card-header">
+                    <h2>IIT Dhanbad (ISM)</h2>
+                    <div class="established">Established: 1926 (as ISM), IIT in 2016</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Dhanbad, Jharkhand
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Mining Engineering</li>
+                            <li>Petroleum Engineering</li>
+                            <li>Mineral Engineering</li>
+                            <li>Mine Safety</li>
+                            <li>Fuel Engineering</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Premier institute for mining and petroleum engineering in India. Strong industry connections in mineral and energy sectors.</p>
+                        <span class="tag">Mining Tech</span>
+                        <span class="tag">Petroleum</span>
+                        <span class="tag">Industry Links</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Bhilai -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Bhilai</h2>
+                    <div class="established">Established: 2016</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Bhilai, Chhattisgarh
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Data Science</li>
+                            <li>Artificial Intelligence</li>
+                            <li>Smart Manufacturing</li>
+                            <li>Materials Science</li>
+                            <li>Energy Systems</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Focus on data science and AI applications in industry. Located in Chhattisgarh's industrial hub.</p>
+                        <span class="tag">AI Focus</span>
+                        <span class="tag">Data Science</span>
+                        <span class="tag">Industrial Hub</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Goa -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Goa</h2>
+                    <div class="established">Established: 2016</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Goa
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Marine Engineering</li>
+                            <li>Renewable Energy</li>
+                            <li>Computational Science</li>
+                            <li>Environmental Engineering</li>
+                            <li>Tourism Technology</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Focus on marine and environmental technologies. Unique programs blending technology with Goa's tourism economy.</p>
+                        <span class="tag">Marine Tech</span>
+                        <span class="tag">Tourism Focus</span>
+                        <span class="tag">Scenic Location</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Jammu -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Jammu</h2>
+                    <div class="established">Established: 2016</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Jammu, Jammu & Kashmir
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Snow & Ice Engineering</li>
+                            <li>Hydropower</li>
+                            <li>Disaster Management</li>
+                            <li>Defense Technologies</li>
+                            <li>Mountain Infrastructure</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Focus on technologies relevant to Himalayan region and defense applications. Strong emphasis on hydropower and disaster management.</p>
+                        <span class="tag">Himalayan Tech</span>
+                        <span class="tag">Defense Focus</span>
+                        <span class="tag">Disaster Management</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IIT Dharwad -->
+            <div class="iit-card" data-category="new">
+                <div class="card-header">
+                    <h2>IIT Dharwad</h2>
+                    <div class="established">Established: 2016</div>
+                    <div class="location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Dharwad, Karnataka
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="specialization">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>Agricultural Technology</li>
+                            <li>Water Resources</li>
+                            <li>Renewable Energy</li>
+                            <li>Smart Materials</li>
+                            <li>Regional Development</li>
+                        </ul>
+                    </div>
+                    <div class="advantages">
+                        <h3>Key Advantages</h3>
+                        <p>Focus on agricultural technologies and regional development. Strong emphasis on water resources and renewable energy.</p>
+                        <span class="tag">Agri Tech</span>
+                        <span class="tag">Regional Focus</span>
+                        <span class="tag">Renewable Energy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 Indian Institutes of Technology Portfolio | All 23 IITs Showcased</p>
+    </footer>
+
+    <script>
+        // Search functionality
+        document.getElementById('search').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.iit-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+        
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                const cards = document.querySelectorAll('.iit-card');
+                
+                cards.forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        if (card.getAttribute('data-category') === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
