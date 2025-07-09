@@ -1,0 +1,1 @@
+IIT-GENIUS as name suugest , we help the students who have secured best rank in JEE ADVANCE EXAM . Give them a plateform where student  predict there  branch in the particular IIT , by this we have to ensure students to give them 100 percent true prediction based on the previous year cut offs . By this we help student free of cost .
