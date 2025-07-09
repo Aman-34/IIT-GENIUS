@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IIT Genius - Your JEE Preparation Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --iit-blue: #0066cc;
+            --iit-dark-blue: #004080;
+            --iit-light-blue: #4da6ff;
+            --iit-white: #ffffff;
+            --iit-gray: #f5f7fa;
+            --iit-accent: #ff6b6b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--iit-white);
+            color: #2c3e50;
+            min-height: 100vh;
+            overflow-x: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--iit-gray);
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--iit-dark-blue);
+        }
+        
+        /* [Add your main application styles here] */
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">IIT GENIUS</div>
+            <nav>
+                <!-- Your navigation menu -->
+            </nav>
+        </header>
+        
+        <main>
+            <!-- Your main application content -->
+            <h1>Welcome to Your Dashboard</h1>
+            <p>Continue your IIT preparation journey...</p>
+        </main>
+    </div>
+
+    <script>
+        // Check if coming from welcome page
+        if(performance.navigation.type === performance.navigation.TYPE_NAVIGATE) {
+            if(localStorage.getItem('hasSeenWelcome') !== 'true') {
+                // Redirect to welcome page if never seen before
+                window.location.href = 'welcome.html';
+            }
+        }
+        
+        // Add smooth transitions between pages
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('main > *');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = `all 0.5s ease ${index * 0.1}s`;
+                
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

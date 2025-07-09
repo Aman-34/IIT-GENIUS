@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IIT Explorer - Comprehensive IIT Portfolio</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 120px);
+        }
+
+        .sidebar {
+            width: 300px;
+            background-color: #34495e;
+            color: white;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .search-box {
+            margin-bottom: 1rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .iit-list {
+            list-style: none;
+        }
+
+        .iit-item {
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            background-color: #2c3e50;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .iit-item:hover {
+            background-color: #1abc9c;
+        }
+
+        .iit-item.active {
+            background-color: #1abc9c;
+            font-weight: bold;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .iit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .iit-title {
+            font-size: 2rem;
+            color: #2c3e50;
+        }
+
+        .iit-logo {
+            height: 80px;
+            width: auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .info-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-card h3 {
+            color: #1abc9c;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #1abc9c;
+            padding-bottom: 0.5rem;
+        }
+
+        .info-item {
+            margin-bottom: 0.8rem;
+        }
+
+        .info-item strong {
+            display: inline-block;
+            width: 150px;
+            color: #2c3e50;
+        }
+
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .branches-list {
+            columns: 2;
+            list-style-position: inside;
+        }
+
+        .placement-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            flex: 1;
+            margin: 0 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1abc9c;
+        }
+
+        .notable-alumni {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .alumni-card {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            flex: 1 1 calc(33% - 1rem);
+            min-width: 200px;
+        }
+
+        .alumni-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .branches-list {
+                columns: 1;
+            }
+            .alumni-card {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>IIT Genius</h1>
+        <div class="subtitle">Comprehensive Portfolio of Indian Institutes of Technology</div>
+    </header>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search IITs...">
+            </div>
+            <ul class="iit-list" id="iit-list">
+                <!-- IIT list items will be added dynamically -->
+            </ul>
+        </div>
+
+        <div class="main-content" id="main-content">
+            <div class="iit-header">
+                <h2 class="iit-title" id="iit-title">Select an IIT from the sidebar</h2>
+                <img class="iit-logo" id="iit-logo" src="" alt="IIT Logo" style="display: none;">
+            </div>
+
+            <div class="content-grid">
+                <div class="info-card">
+                    <h3>Basic Information</h3>
+                    <div class="info-item">
+                        <strong>Established:</strong>
+                        <span id="established"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Location:</strong>
+                        <span id="location"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Type:</strong>
+                        <span id="type"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Director:</strong>
+                        <span id="director"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Campus Size:</strong>
+                        <span id="campus-size"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Website:</strong>
+                        <a id="website" href="#" target="_blank"></a>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Engineering Branches</h3>
+                    <ul class="branches-list" id="branches-list">
+                        <!-- Branches will be added dynamically -->
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>Placement Statistics (2025)</h3>
+                    <div class="placement-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="placement-rate"></div>
+                            <div>Placement Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="avg-package"></div>
+                            <div>Avg. Package (LPA)</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="highest-package"></div>
+                            <div>Highest Package (LPA)</div>
+                        </div>
+                    </div>
+                    <div class="info-item" style="margin-top: 1rem;">
+                        <strong>Top Recruiters:</strong>
+                        <span id="top-recruiters"></span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Special Features</h3>
+                    <div id="special-features"></div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Notable Alumni</h3>
+                    <div class="notable-alumni" id="notable-alumni">
+                        <!-- Alumni cards will be added dynamically -->
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Location</h3>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 IIT Genius | All Rights Reserved
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // IIT data - comprehensive information for each IIT
+        const iitData = [
+            {
+                id: 'iit-bombay',
+                name: 'IIT Bombay',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Indian_Institute_of_Technology_Bombay_Logo.svg/1200px-Indian_Institute_of_Technology_Bombay_Logo.svg.png',
+                established: '1958',
+                location: 'Mumbai, Maharashtra',
+                type: 'Public Technical University',
+                director: 'Prof. Subhasis Chaudhuri',
+                campusSize: '550 acres',
+                website: 'https://www.iitb.ac.in/',
+                branches: [
+                    'Aerospace Engineering',
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Metallurgical Engineering and Materials Science',
+                    'Engineering Physics',
+                    'Energy Science and Engineering',
+                    'Environmental Science and Engineering'
+                ],
+                placement: {
+                    rate: '85%',
+                    avgPackage: '21.5',
+                    highestPackage: '1.7 Cr',
+                    topRecruiters: 'Google, Microsoft, Amazon, Goldman Sachs, Tata, Reliance'
+                },
+                specialFeatures: [
+                    'First IIT established with foreign assistance (UNESCO funds from Soviet Union)',
+                    'Hosts the annual tech festival "Techfest", Asia\'s largest science and technology festival',
+                    'Strong research focus with numerous patents and publications',
+                    'Collaborations with top international universities',
+                    'Pioneer in interdisciplinary engineering programs'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Nandan Nilekani',
+                        achievement: 'Co-founder of Infosys, Chairman of UIDAI (Aadhaar)'
+                    },
+                    {
+                        name: 'Vinod Khosla',
+                        achievement: 'Co-founder of Sun Microsystems, Venture Capitalist'
+                    },
+                    {
+                        name: 'Arvind Kejriwal',
+                        achievement: 'Chief Minister of Delhi, Founder of Aam Aadmi Party'
+                    },
+                    {
+                        name: 'Sachin Bansal & Binny Bansal',
+                        achievement: 'Founders of Flipkart'
+                    },
+                    {
+                        name: 'Raghuram Rajan',
+                        achievement: 'Former Governor of Reserve Bank of India'
+                    }
+                ],
+                coordinates: [19.1334, 72.9133]
+            },
+            {
+                id: 'iit-madras',
+                name: 'IIT Madras',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/69/IIT_Madras_Logo.svg/1200px-IIT_Madras_Logo.svg.png',
+                established: '1959',
+                location: 'Chennai, Tamil Nadu',
+                type: 'Public Technical University',
+                director: 'Prof. V. Kamakoti',
+                campusSize: '620 acres',
+                website: 'https://www.iitm.ac.in/',
+                branches: [
+                    'Aerospace Engineering',
+                    'Applied Mechanics',
+                    'Biotechnology',
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Engineering Design',
+                    'Mechanical Engineering',
+                    'Metallurgical and Materials Engineering',
+                    'Naval Architecture and Ocean Engineering',
+                    'Physics'
+                ],
+                placement: {
+                    rate: '82%',
+                    avgPackage: '20.8',
+                    highestPackage: '1.5 Cr',
+                    topRecruiters: 'Microsoft, Amazon, Qualcomm, Texas Instruments, ISRO'
+                },
+                specialFeatures: [
+                    'Ranked #1 in India in NIRF rankings for several consecutive years',
+                    'Research park that fosters industry-academia collaboration',
+                    'Strong focus on entrepreneurship with many successful startups emerging',
+                    'Unique "Heritage Centre" documenting IIT Madras history',
+                    'Pioneer in online education with BS in Data Science program'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Kris Gopalakrishnan',
+                        achievement: 'Co-founder of Infosys'
+                    },
+                    {
+                        name: 'Arvind Swami',
+                        achievement: 'Actor and Entrepreneur'
+                    },
+                    {
+                        name: 'Vijay P. Bhatkar',
+                        achievement: 'Architect of India\'s PARAM supercomputer'
+                    },
+                    {
+                        name: 'P. Gopichand',
+                        achievement: 'Badminton player and coach'
+                    },
+                    {
+                        name: 'Ashok Jhunjhunwala',
+                        achievement: 'Professor known for telecom innovations'
+                    }
+                ],
+                coordinates: [12.9915, 80.2337]
+            },
+            {
+                id: 'iit-kanpur',
+                name: 'IIT Kanpur',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/IIT_Kanpur_Logo.svg/1200px-IIT_Kanpur_Logo.svg.png',
+                established: '1959',
+                location: 'Kanpur, Uttar Pradesh',
+                type: 'Public Technical University',
+                director: 'Prof. Abhay Karandikar',
+                campusSize: '1055 acres',
+                website: 'https://www.iitk.ac.in/',
+                branches: [
+                    'Aerospace Engineering',
+                    'Biological Sciences and Bioengineering',
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Materials Science and Engineering',
+                    'Mechanical Engineering',
+                    'Industrial and Management Engineering',
+                    'Nuclear Engineering and Technology'
+                ],
+                placement: {
+                    rate: '80%',
+                    avgPackage: '19.2',
+                    highestPackage: '1.3 Cr',
+                    topRecruiters: 'Uber, Oracle, Samsung, McKinsey, Boston Consulting Group'
+                },
+                specialFeatures: [
+                    'Pioneer in computer science education in India',
+                    'First IIT to provide internet connectivity in India',
+                    'Strong aerospace program with wind tunnel facilities',
+                    'Home to the National Wind Tunnel Facility',
+                    'Innovative "Student Technical Activities Body" promoting hands-on learning'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Narayana Murthy',
+                        achievement: 'Founder of Infosys'
+                    },
+                    {
+                        name: 'Manindra Agrawal',
+                        achievement: 'Renowned mathematician, FRS'
+                    },
+                    {
+                        name: 'Ashwini Vaishnaw',
+                        achievement: 'Union Minister for Railways, IT and Communications'
+                    },
+                    {
+                        name: 'Sanjiv Bajaj',
+                        achievement: 'MD of Bajaj Finserv'
+                    },
+                    {
+                        name: 'Arun Netravali',
+                        achievement: 'Former President of Bell Labs'
+                    }
+                ],
+                coordinates: [26.5123, 80.2329]
+            },
+            {
+                id: 'iit-delhi',
+                name: 'IIT Delhi',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/79/Indian_Institute_of_Technology_Delhi_Logo.svg/1200px-Indian_Institute_of_Technology_Delhi_Logo.svg.png',
+                established: '1961',
+                location: 'New Delhi',
+                type: 'Public Technical University',
+                director: 'Prof. Rangan Banerjee',
+                campusSize: '325 acres',
+                website: 'https://home.iitd.ac.in/',
+                branches: [
+                    'Biochemical Engineering and Biotechnology',
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Materials Science and Engineering',
+                    'Textile Technology',
+                    'Applied Mechanics',
+                    'Mathematics and Computing'
+                ],
+                placement: {
+                    rate: '83%',
+                    avgPackage: '20.1',
+                    highestPackage: '1.6 Cr',
+                    topRecruiters: 'Adobe, Intel, Morgan Stanley, Deutsche Bank, Flipkart'
+                },
+                specialFeatures: [
+                    'Strong industry connections due to Delhi location',
+                    'Innovation and entrepreneurship hub with many successful startups',
+                    'Hosts the annual cultural festival "Rendezvous"',
+                    'Excellent research output with high citation index',
+                    'Collaborations with government agencies and ministries'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Rajiv Motwani',
+                        achievement: 'Computer scientist, early investor in Google'
+                    },
+                    {
+                        name: 'Vijay Shekhar Sharma',
+                        achievement: 'Founder of Paytm'
+                    },
+                    {
+                        name: 'Pankaj Chandra',
+                        achievement: 'Former Director of IIM Bangalore'
+                    },
+                    {
+                        name: 'Baba Kalyani',
+                        achievement: 'Chairman of Bharat Forge'
+                    },
+                    {
+                        name: 'Sandeep Singhal',
+                        achievement: 'Co-founder of Sequoia Capital India'
+                    }
+                ],
+                coordinates: [28.5450, 77.1926]
+            },
+            {
+                id: 'iit-kharagpur',
+                name: 'IIT Kharagpur',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/IIT_Kharagpur_Logo.svg/1200px-IIT_Kharagpur_Logo.svg.png',
+                established: '1951',
+                location: 'Kharagpur, West Bengal',
+                type: 'Public Technical University',
+                director: 'Prof. Virendra Kumar Tewari',
+                campusSize: '2100 acres',
+                website: 'https://www.iitkgp.ac.in/',
+                branches: [
+                    'Aerospace Engineering',
+                    'Agricultural and Food Engineering',
+                    'Architecture and Regional Planning',
+                    'Biotechnology',
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Electronics and Electrical Communication Engineering',
+                    'Industrial and Systems Engineering',
+                    'Mechanical Engineering',
+                    'Metallurgical and Materials Engineering',
+                    'Mining Engineering',
+                    'Ocean Engineering and Naval Architecture',
+                    'Rubber Technology'
+                ],
+                placement: {
+                    rate: '78%',
+                    avgPackage: '18.5',
+                    highestPackage: '1.4 Cr',
+                    topRecruiters: 'Tata Steel, JSW, Larsen & Toubro, ITC, PwC'
+                },
+                specialFeatures: [
+                    'First and largest IIT in India',
+                    '2,100-acre campus is the largest among all IITs',
+                    'Home to the first and only School of Medical Science and Technology',
+                    'Offers unique programs like Rubber Technology and Ocean Engineering',
+                    'Hosts the annual techno-management festival "Spring Fest"'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Sundar Pichai',
+                        achievement: 'CEO of Alphabet and Google'
+                    },
+                    {
+                        name: 'Arjun Malhotra',
+                        achievement: 'Co-founder of HCL Technologies'
+                    },
+                    {
+                        name: 'Vinod Gupta',
+                        achievement: 'Founder of InfoGROUP'
+                    },
+                    {
+                        name: 'Arogyaswami Paulraj',
+                        achievement: 'Inventor of MIMO wireless technology'
+                    },
+                    {
+                        name: 'Manohar Parrikar',
+                        achievement: 'Former Defence Minister of India'
+                    }
+                ],
+                coordinates: [22.3149, 87.3105]
+            },
+            {
+                id: 'iit-roorkee',
+                name: 'IIT Roorkee',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/IIT_Roorkee_Logo.svg/1200px-IIT_Roorkee_Logo.svg.png',
+                established: '1847 (as Thomason College), IIT status in 2001',
+                location: 'Roorkee, Uttarakhand',
+                type: 'Public Technical University',
+                director: 'Prof. Ajit K. Chaturvedi',
+                campusSize: '365 acres',
+                website: 'https://www.iitr.ac.in/',
+                branches: [
+                    'Architecture and Planning',
+                    'Biotechnology',
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Earthquake Engineering',
+                    'Electrical Engineering',
+                    'Electronics and Communication Engineering',
+                    'Mechanical and Industrial Engineering',
+                    'Metallurgical and Materials Engineering',
+                    'Paper Technology',
+                    'Polymer Science and Engineering',
+                    'Water Resources Development and Management'
+                ],
+                placement: {
+                    rate: '75%',
+                    avgPackage: '17.8',
+                    highestPackage: '1.2 Cr',
+                    topRecruiters: 'ONGC, NTPC, DRDO, NHPC, Power Grid Corporation'
+                },
+                specialFeatures: [
+                    'Oldest engineering institution in Asia',
+                    'Strong in civil and earthquake engineering',
+                    'Home to the "Mahatma Gandhi Central Library", one of the largest technical libraries',
+                    'Unique programs in Paper Technology and Polymer Science',
+                    'Strong focus on water resources and hydrology'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Narinder Singh Kapany',
+                        achievement: 'Father of Fiber Optics'
+                    },
+                    {
+                        name: 'A. S. Rao',
+                        achievement: 'Founder of ECIL'
+                    },
+                    {
+                        name: 'Kanwar Sen',
+                        achievement: 'Pioneer in irrigation engineering'
+                    },
+                    {
+                        name: 'M. M. Sharma',
+                        achievement: 'Renowned chemical engineer, FRS'
+                    },
+                    {
+                        name: 'B. N. Suresh',
+                        achievement: 'Former Director of VSSC, ISRO'
+                    }
+                ],
+                coordinates: [29.8663, 77.8953]
+            },
+            {
+                id: 'iit-guwahati',
+                name: 'IIT Guwahati',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/04/IIT_Guwahati_Logo.svg/1200px-IIT_Guwahati_Logo.svg.png',
+                established: '1994',
+                location: 'Guwahati, Assam',
+                type: 'Public Technical University',
+                director: 'Prof. Rajeev Ahuja',
+                campusSize: '700 acres',
+                website: 'https://www.iitg.ac.in/',
+                branches: [
+                    'Biosciences and Bioengineering',
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Design',
+                    'Electronics and Electrical Engineering',
+                    'Engineering Physics',
+                    'Mathematics and Computing',
+                    'Mechanical Engineering',
+                    'Humanities and Social Sciences'
+                ],
+                placement: {
+                    rate: '72%',
+                    avgPackage: '16.5',
+                    highestPackage: '95 L',
+                    topRecruiters: 'Oil India, NRL, HPCL, OIL, Numaligarh Refinery'
+                },
+                specialFeatures: [
+                    'Picturesque campus on the banks of Brahmaputra river',
+                    'Strong focus on research in areas relevant to Northeast India',
+                    'First IIT to introduce Design as a discipline',
+                    'Hosts the annual techno-management festival "Techniche"',
+                    'Innovative curriculum with flexibility in course selection'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Pranay Chulet',
+                        achievement: 'Founder of Quikr'
+                    },
+                    {
+                        name: 'Ankit Prasad',
+                        achievement: 'Founder of Bobble AI'
+                    },
+                    {
+                        name: 'Siddhartha Das',
+                        achievement: 'Founder of Chai Point'
+                    },
+                    {
+                        name: 'Prateek Jain',
+                        achievement: 'Co-founder of HackerEarth'
+                    },
+                    {
+                        name: 'Anurag Dikshit',
+                        achievement: 'Co-founder of PartyGaming'
+                    }
+                ],
+                coordinates: [26.1879, 91.6919]
+            },
+            {
+                id: 'iit-bhubaneswar',
+                name: 'IIT Bhubaneswar',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/2d/IIT_Bhubaneswar_Logo.svg/1200px-IIT_Bhubaneswar_Logo.svg.png',
+                established: '2008',
+                location: 'Bhubaneswar, Odisha',
+                type: 'Public Technical University',
+                director: 'Prof. Shreepad Karmalkar',
+                campusSize: '936 acres',
+                website: 'https://www.iitbbs.ac.in/',
+                branches: [
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Metallurgical and Materials Engineering',
+                    'School of Minerals, Metallurgical and Materials Engineering',
+                    'School of Infrastructure'
+                ],
+                placement: {
+                    rate: '68%',
+                    avgPackage: '14.2',
+                    highestPackage: '75 L',
+                    topRecruiters: 'TATA Steel, Vedanta, Jindal Steel, Infosys, Wipro'
+                },
+                specialFeatures: [
+                    'Focus on minerals and metallurgical engineering relevant to Odisha',
+                    'Sustainable campus design with green buildings',
+                    'Strong industry-academia partnerships in mining and minerals sector',
+                    'Research focus on coastal and marine engineering',
+                    'Developing infrastructure for advanced research facilities'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newer IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [20.1500, 85.6600]
+            },
+            {
+                id: 'iit-gandhinagar',
+                name: 'IIT Gandhinagar',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/8a/IIT_Gandhinagar_Logo.svg/1200px-IIT_Gandhinagar_Logo.svg.png',
+                established: '2008',
+                location: 'Gandhinagar, Gujarat',
+                type: 'Public Technical University',
+                director: 'Prof. Rajat Moona',
+                campusSize: '400 acres',
+                website: 'https://www.iitgn.ac.in/',
+                branches: [
+                    'Biological Engineering',
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Materials Science and Engineering',
+                    'Mechanical Engineering',
+                    'Cognitive Science'
+                ],
+                placement: {
+                    rate: '70%',
+                    avgPackage: '15.8',
+                    highestPackage: '85 L',
+                    topRecruiters: 'Adani Group, Reliance, L&T, Tata Motors, Cadila'
+                },
+                specialFeatures: [
+                    'Innovative curriculum with focus on liberal arts and sciences',
+                    'Mandatory 5-week immersion program for all students',
+                    'Strong emphasis on undergraduate research',
+                    'Unique "Foundation Programme" for first-year students',
+                    'Focus on interdisciplinary learning and critical thinking'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newer IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [23.2120, 72.6814]
+            },
+            {
+                id: 'iit-hyderabad',
+                name: 'IIT Hyderabad',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/IIT_Hyderabad_Logo.svg/1200px-IIT_Hyderabad_Logo.svg.png',
+                established: '2008',
+                location: 'Hyderabad, Telangana',
+                type: 'Public Technical University',
+                director: 'Prof. B. S. Murty',
+                campusSize: '576 acres',
+                website: 'https://www.iith.ac.in/',
+                branches: [
+                    'Artificial Intelligence',
+                    'Biomedical Engineering',
+                    'Biotechnology',
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Design',
+                    'Electrical Engineering',
+                    'Engineering Science',
+                    'Materials Science and Metallurgical Engineering',
+                    'Mechanical and Aerospace Engineering'
+                ],
+                placement: {
+                    rate: '74%',
+                    avgPackage: '16.2',
+                    highestPackage: '90 L',
+                    topRecruiters: 'Microsoft, Amazon, Qualcomm, DRDO, ISRO'
+                },
+                specialFeatures: [
+                    'Strong focus on AI and data science programs',
+                    'Industry-oriented curriculum with many electives',
+                    'Research focus on healthcare technologies',
+                    'Active startup incubation center',
+                    'Collaborations with nearby IT companies and research labs'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newer IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [17.5925, 78.1231]
+            },
+            {
+                id: 'iit-jodhpur',
+                name: 'IIT Jodhpur',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6a/IIT_Jodhpur_Logo.svg/1200px-IIT_Jodhpur_Logo.svg.png',
+                established: '2008',
+                location: 'Jodhpur, Rajasthan',
+                type: 'Public Technical University',
+                director: 'Prof. Santanu Chaudhury',
+                campusSize: '852 acres',
+                website: 'https://www.iitj.ac.in/',
+                branches: [
+                    'Artificial Intelligence and Data Science',
+                    'Bioengineering',
+                    'Chemical Engineering',
+                    'Civil and Infrastructure Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Materials Engineering',
+                    'Mechanical Engineering',
+                    'Metallurgical and Materials Engineering'
+                ],
+                placement: {
+                    rate: '65%',
+                    avgPackage: '13.5',
+                    highestPackage: '70 L',
+                    topRecruiters: 'JCB, Hero MotoCorp, Ashok Leyland, Infosys, TCS'
+                },
+                specialFeatures: [
+                    'Focus on AI and smart manufacturing',
+                    'Research in areas relevant to desert technologies',
+                    'Strong emphasis on technology for rural development',
+                    'Collaborations with defense organizations',
+                    'Developing programs in cyber-physical systems'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newer IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [26.2389, 73.0243]
+            },
+            {
+                id: 'iit-patna',
+                name: 'IIT Patna',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/IIT_Patna_Logo.svg/1200px-IIT_Patna_Logo.svg.png',
+                established: '2008',
+                location: 'Patna, Bihar',
+                type: 'Public Technical University',
+                director: 'Prof. T. N. Singh',
+                campusSize: '501 acres',
+                website: 'https://www.iitp.ac.in/',
+                branches: [
+                    'Chemical and Biochemical Engineering',
+                    'Civil and Environmental Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Metallurgical and Materials Engineering'
+                ],
+                placement: {
+                    rate: '63%',
+                    avgPackage: '12.8',
+                    highestPackage: '65 L',
+                    topRecruiters: 'HAL, BEL, NTPC, SAIL, Wipro'
+                },
+                specialFeatures: [
+                    'Focus on technologies for rural and agricultural development',
+                    'Strong research in earthquake engineering',
+                    'Developing programs in AI and IoT',
+                    'Collaborations with state government on infrastructure projects',
+                    'Growing research output in materials science'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newer IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [25.5436, 85.0156]
+            },
+            {
+                id: 'iit-ropar',
+                name: 'IIT Ropar',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/IIT_Ropar_Logo.svg/1200px-IIT_Ropar_Logo.svg.png',
+                established: '2008',
+                location: 'Rupnagar, Punjab',
+                type: 'Public Technical University',
+                director: 'Prof. Rajeev Ahuja',
+                campusSize: '525 acres',
+                website: 'https://www.iitrpr.ac.in/',
+                branches: [
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Metallurgical and Materials Engineering'
+                ],
+                placement: {
+                    rate: '67%',
+                    avgPackage: '13.2',
+                    highestPackage: '68 L',
+                    topRecruiters: 'Punjab State Power Corporation, Hero MotoCorp, Nestle, ITC'
+                },
+                specialFeatures: [
+                    'Focus on energy and environmental engineering',
+                    'Strong industry collaborations in food processing',
+                    'Research in advanced manufacturing technologies',
+                    'Growing programs in data science and AI',
+                    'Active technology business incubator'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newer IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [30.9665, 76.5262]
+            },
+            {
+                id: 'iit-indore',
+                name: 'IIT Indore',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9c/IIT_Indore_Logo.svg/1200px-IIT_Indore_Logo.svg.png',
+                established: '2009',
+                location: 'Indore, Madhya Pradesh',
+                type: 'Public Technical University',
+                director: 'Prof. Suhas Joshi',
+                campusSize: '510 acres',
+                website: 'https://www.iiti.ac.in/',
+                branches: [
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Metallurgical Engineering and Materials Science',
+                    'Astronomy, Astrophysics and Space Engineering'
+                ],
+                placement: {
+                    rate: '69%',
+                    avgPackage: '14.5',
+                    highestPackage: '72 L',
+                    topRecruiters: 'L&T, Mahindra, Infosys, TCS, DRDO'
+                },
+                specialFeatures: [
+                    'Strong focus on space technology and astronomy',
+                    'Research in smart materials and nanotechnology',
+                    'Collaborations with ISRO and defense organizations',
+                    'Growing programs in AI and robotics',
+                    'Active student research groups and clubs'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newer IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [22.5253, 75.9396]
+            },
+            {
+                id: 'iit-mandi',
+                name: 'IIT Mandi',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6a/IIT_Mandi_Logo.svg/1200px-IIT_Mandi_Logo.svg.png',
+                established: '2009',
+                location: 'Mandi, Himachal Pradesh',
+                type: 'Public Technical University',
+                director: 'Prof. Laxmidhar Behera',
+                campusSize: '538 acres',
+                website: 'https://www.iitmandi.ac.in/',
+                branches: [
+                    'Bioengineering',
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Engineering Physics'
+                ],
+                placement: {
+                    rate: '64%',
+                    avgPackage: '13.8',
+                    highestPackage: '70 L',
+                    topRecruiters: 'Himachal Pradesh Power Corporation, NTPC, BEL, Infosys'
+                },
+                specialFeatures: [
+                    'Focus on Himalayan technologies and sustainable development',
+                    'Research in earthquake engineering and disaster management',
+                    'Strong emphasis on undergraduate research',
+                    'Beautiful campus in Himalayan foothills',
+                    'Growing programs in data science and IoT'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newer IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [31.7084, 76.9314]
+            },
+            {
+                id: 'iit-palakkad',
+                name: 'IIT Palakkad',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/3e/IIT_Palakkad_Logo.svg/1200px-IIT_Palakkad_Logo.svg.png',
+                established: '2015',
+                location: 'Palakkad, Kerala',
+                type: 'Public Technical University',
+                director: 'Prof. A. Seshadri Sekhar',
+                campusSize: '500 acres',
+                website: 'https://www.iitpkd.ac.in/',
+                branches: [
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Data Science'
+                ],
+                placement: {
+                    rate: '60%',
+                    avgPackage: '12.5',
+                    highestPackage: '60 L',
+                    topRecruiters: 'Kerala State IT Mission, UST Global, TCS, Wipro'
+                },
+                specialFeatures: [
+                    'Focus on sustainable technologies and renewable energy',
+                    'Research in water resources and hydrology',
+                    'Collaborations with Kerala startups and IT companies',
+                    'Growing programs in AI and machine learning',
+                    'Beautiful campus in Western Ghats'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newest IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [10.7726, 76.6538]
+            },
+            {
+                id: 'iit-tirupati',
+                name: 'IIT Tirupati',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/IIT_Tirupati_Logo.svg/1200px-IIT_Tirupati_Logo.svg.png',
+                established: '2015',
+                location: 'Tirupati, Andhra Pradesh',
+                type: 'Public Technical University',
+                director: 'Prof. K. N. Satyanarayana',
+                campusSize: '530 acres',
+                website: 'https://www.iittp.ac.in/',
+                branches: [
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering'
+                ],
+                placement: {
+                    rate: '62%',
+                    avgPackage: '12.3',
+                    highestPackage: '58 L',
+                    topRecruiters: 'Andhra Pradesh State Development Corporation, Infosys, TCS'
+                },
+                specialFeatures: [
+                    'Focus on technologies for smart cities',
+                    'Research in advanced materials and manufacturing',
+                    'Collaborations with ISRO and DRDO',
+                    'Growing programs in AI and data science',
+                    'Developing infrastructure for advanced research'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newest IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [13.6288, 79.4192]
+            },
+            {
+                id: 'iit-bhilai',
+                name: 'IIT Bhilai',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/IIT_Bhilai_Logo.svg/1200px-IIT_Bhilai_Logo.svg.png',
+                established: '2016',
+                location: 'Bhilai, Chhattisgarh',
+                type: 'Public Technical University',
+                director: 'Prof. Rajat Moona',
+                campusSize: '457 acres',
+                website: 'https://www.iitbhilai.ac.in/',
+                branches: [
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Data Science and Artificial Intelligence'
+                ],
+                placement: {
+                    rate: '58%',
+                    avgPackage: '11.8',
+                    highestPackage: '55 L',
+                    topRecruiters: 'Bhilai Steel Plant, NMDC, SAIL, Infosys'
+                },
+                specialFeatures: [
+                    'Focus on AI and data science applications in industry',
+                    'Research in materials science relevant to steel industry',
+                    'Collaborations with local industries',
+                    'Growing programs in robotics and automation',
+                    'Developing infrastructure for advanced computing'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newest IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [21.2096, 81.3704]
+            },
+            {
+                id: 'iit-goa',
+                name: 'IIT Goa',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/IIT_Goa_Logo.svg/1200px-IIT_Goa_Logo.svg.png',
+                established: '2016',
+                location: 'Goa',
+                type: 'Public Technical University',
+                director: 'Prof. B. K. Mishra',
+                campusSize: '350 acres',
+                website: 'https://www.iitgoa.ac.in/',
+                branches: [
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Mathematics and Computing'
+                ],
+                placement: {
+                    rate: '61%',
+                    avgPackage: '12.1',
+                    highestPackage: '56 L',
+                    topRecruiters: 'Goa Shipyard, Zuari Group, Infosys, Wipro'
+                },
+                specialFeatures: [
+                    'Focus on marine and ocean engineering',
+                    'Research in renewable energy technologies',
+                    'Collaborations with tourism and hospitality industry',
+                    'Growing programs in AI and IoT',
+                    'Beautiful campus in coastal region'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newest IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [15.4230, 73.9877]
+            },
+            {
+                id: 'iit-jammu',
+                name: 'IIT Jammu',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/IIT_Jammu_Logo.svg/1200px-IIT_Jammu_Logo.svg.png',
+                established: '2016',
+                location: 'Jammu, Jammu and Kashmir',
+                type: 'Public Technical University',
+                director: 'Prof. Manoj Singh Gaur',
+                campusSize: '400 acres',
+                website: 'https://www.iitjammu.ac.in/',
+                branches: [
+                    'Chemical Engineering',
+                    'Civil Engineering',
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Materials Engineering'
+                ],
+                placement: {
+                    rate: '59%',
+                    avgPackage: '11.5',
+                    highestPackage: '52 L',
+                    topRecruiters: 'Jammu and Kashmir Power Development Department, NHPC, Infosys'
+                },
+                specialFeatures: [
+                    'Focus on technologies for cold regions',
+                    'Research in energy and power systems',
+                    'Collaborations with defense organizations',
+                    'Growing programs in AI and cybersecurity',
+                    'Developing infrastructure for advanced research'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newest IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [32.7266, 74.8570]
+            },
+            {
+                id: 'iit-dharwad',
+                name: 'IIT Dharwad',
+                logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/IIT_Dharwad_Logo.svg/1200px-IIT_Dharwad_Logo.svg.png',
+                established: '2016',
+                location: 'Dharwad, Karnataka',
+                type: 'Public Technical University',
+                director: 'Prof. Venkappayya Desai',
+                campusSize: '470 acres',
+                website: 'https://www.iitdh.ac.in/',
+                branches: [
+                    'Computer Science and Engineering',
+                    'Electrical Engineering',
+                    'Mechanical Engineering',
+                    'Interdisciplinary Sciences'
+                ],
+                placement: {
+                    rate: '57%',
+                    avgPackage: '11.2',
+                    highestPackage: '50 L',
+                    topRecruiters: 'Karnataka State Industries, Infosys, Wipro, BEL'
+                },
+                specialFeatures: [
+                    'Focus on interdisciplinary research',
+                    'Research in materials science and manufacturing',
+                    'Collaborations with local industries',
+                    'Growing programs in AI and data science',
+                    'Developing infrastructure for advanced research'
+                ],
+                notableAlumni: [
+                    {
+                        name: 'Alumni network still developing',
+                        achievement: 'Newest IIT with growing alumni base'
+                    }
+                ],
+                coordinates: [15.4589, 75.0078]
+            }
+        ];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Populate the IIT list
+            const iitList = document.getElementById('iit-list');
+            iitData.forEach(iit => {
+                const li = document.createElement('li');
+                li.className = 'iit-item';
+                li.textContent = iit.name;
+                li.dataset.id = iit.id;
+                li.addEventListener('click', () => displayIITInfo(iit.id));
+                iitList.appendChild(li);
+            });
+
+            // Set up search functionality
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const items = document.querySelectorAll('.iit-item');
+                
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+
+            // Initialize map
+            window.map = L.map('map').setView([20.5937, 78.9629], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Display first IIT by default
+            if (iitData.length > 0) {
+                displayIITInfo(iitData[0].id);
+                document.querySelector(`.iit-item[data-id="${iitData[0].id}"]`).classList.add('active');
+            }
+        });
+
+        // Function to display IIT information
+        function displayIITInfo(iitId) {
+            const iit = iitData.find(item => item.id === iitId);
+            if (!iit) return;
+
+            // Update active item in sidebar
+            document.querySelectorAll('.iit-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.iit-item[data-id="${iitId}"]`).classList.add('active');
+
+            // Update header
+            document.getElementById('iit-title').textContent = iit.name;
+            const logoImg = document.getElementById('iit-logo');
+            logoImg.src = iit.logo;
+            logoImg.style.display = 'block';
+            logoImg.alt = `${iit.name} Logo`;
+
+            // Update basic info
+            document.getElementById('established').textContent = iit.established;
+            document.getElementById('location').textContent = iit.location;
+            document.getElementById('type').textContent = iit.type;
+            document.getElementById('director').textContent = iit.director;
+            document.getElementById('campus-size').textContent = iit.campusSize;
+            const websiteLink = document.getElementById('website');
+            websiteLink.href = iit.website;
+            websiteLink.textContent = iit.website;
+
+            // Update branches
+            const branchesList = document.getElementById('branches-list');
+            branchesList.innerHTML = '';
+            iit.branches.forEach(branch => {
+                const li = document.createElement('li');
+                li.textContent = branch;
+                branchesList.appendChild(li);
+            });
+
+            // Update placement stats
+            document.getElementById('placement-rate').textContent = iit.placement.rate;
+            document.getElementById('avg-package').textContent = iit.placement.avgPackage;
+            document.getElementById('highest-package').textContent = iit.placement.highestPackage;
+            document.getElementById('top-recruiters').textContent = iit.placement.topRecruiters;
+
+            // Update special features
+            const specialFeatures = document.getElementById('special-features');
+            specialFeatures.innerHTML = '';
+            iit.specialFeatures.forEach(feature => {
+                const p = document.createElement('p');
+                p.textContent = `• ${feature}`;
+                p.style.marginBottom = '0.5rem';
+                specialFeatures.appendChild(p);
+            });
+
+            // Update notable alumni
+            const notableAlumni = document.getElementById('notable-alumni');
+            notableAlumni.innerHTML = '';
+            iit.notableAlumni.forEach(alumni => {
+                const div = document.createElement('div');
+                div.className = 'alumni-card';
+                div.innerHTML = `
+                    <div class="alumni-name">${alumni.name}</div>
+                    <div>${alumni.achievement}</div>
+                `;
+                notableAlumni.appendChild(div);
+            });
+
+            // Update map
+            map.setView(iit.coordinates, 13);
+            map.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            L.marker(iit.coordinates).addTo(map)
+                .bindPopup(`<b>${iit.name}</b><br>${iit.location}`)
+                .openPopup();
+        }
+    </script>
+</body>
+</html>

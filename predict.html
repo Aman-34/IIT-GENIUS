@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IIT Genius - Complete IIT Prediction</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --accent-color: #3498db;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #3498db, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .user-info {
+            text-align: right;
+            margin: 10px 0;
+            font-weight: 600;
+        }
+        
+        .logout-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .prediction-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin: 40px auto;
+            transition: all 0.4s;
+        }
+        
+        .prediction-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .prediction-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .prediction-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, #3498db, #e74c3c);
+            border-radius: 2px;
+        }
+        
+        .email-subscription {
+            background: linear-gradient(135deg, #f5f7fa 0%, #dfe6f1 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .email-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .email-desc {
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+        }
+        
+        button {
+            background: linear-gradient(to right, #3498db, #e74c3c);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+        
+        .success-message {
+            color: #27ae60;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .results-container {
+            margin-top: 40px;
+        }
+        
+        .results-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .iit-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            border-left: 5px solid var(--accent-color);
+        }
+        
+        .iit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .iit-name {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .iit-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            background: var(--light-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        .branch {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .branch:last-child {
+            border-bottom: none;
+        }
+        
+        .branch-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .chance {
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .high-chance {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+        }
+        
+        .medium-chance {
+            background: linear-gradient(to right, #f39c12, #e67e22);
+        }
+        
+        .low-chance {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+        
+        .cutoff-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .cutoff-table th, .cutoff-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cutoff-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .cutoff-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .cutoff-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .cutoff-toggle {
+            color: var(--accent-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        
+        .cutoff-toggle:hover {
+            text-decoration: underline;
+        }
+        
+        .brochure {
+            background: linear-gradient(135deg, #f5f7fa 0%, #dfe6f1 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 50px;
+            border: 1px solid #ddd;
+        }
+        
+        .brochure-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .brochure-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+        
+        .documents-list {
+            list-style-type: none;
+            columns: 2;
+            column-gap: 40px;
+        }
+        
+        .documents-list li {
+            padding: 10px 0;
+            position: relative;
+            padding-left: 30px;
+            break-inside: avoid;
+        }
+        
+        .documents-list li:before {
+            content: '✓';
+            color: var(--secondary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 10px;
+        }
+        
+        .helpline {
+            margin-top: 50px;
+            text-align: center;
+            background: var(--primary-color);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        
+        .helpline-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+        
+        .contact-person {
+            display: inline-block;
+            margin: 0 20px;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .contact-person:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .contact-name {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            color: var(--primary-color);
+            font-size: 1rem;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-color);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+        }
+        
+        #search-iit {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .prediction-container {
+                padding: 25px 15px;
+            }
+            
+            .documents-list {
+                columns: 1;
+            }
+            
+            .contact-person {
+                display: block;
+                margin: 15px 0;
+            }
+            
+            .iit-name {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">IIT Genius</div>
+            <div class="tagline">Complete IIT Admission Predictor</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="user-info">
+            Welcome, <span id="display-rollno"></span>
+            <button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+        
+        <div class="prediction-container">
+            <h1 class="prediction-title">IIT Admission Predictor</h1>
+            
+            <div class="email-subscription">
+                <h3 class="email-title"><i class="fas fa-envelope"></i> Stay Updated</h3>
+                <p class="email-desc">Subscribe to receive important updates about your admission process</p>
+                <div class="form-group">
+                    <input type="email" id="user-email" placeholder="Enter your email address">
+                </div>
+                <button id="subscribe-btn"><i class="fas fa-paper-plane"></i> Subscribe</button>
+                <div id="subscription-success" class="success-message hidden">
+                    <i class="fas fa-check-circle"></i> Thank you! You'll receive updates on your email.
+                </div>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="jee-rank"><i class="fas fa-trophy"></i> Enter Your JEE Advanced Rank</label>
+                <input type="number" id="jee-rank" placeholder="Enter your All India Rank (AIR)" min="1">
+            </div>
+            
+            <div class="form-group">
+                <label for="category"><i class="fas fa-users"></i> Select Your Category</label>
+                <select id="category">
+                    <option value="OPEN">General (OPEN)</option>
+                    <option value="OBC-NCL">OBC-NCL</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="EWS">EWS</option>
+                    <option value="OPEN-PwD">General PwD</option>
+                    <option value="OBC-NCL-PwD">OBC-NCL PwD</option>
+                    <option value="SC-PwD">SC PwD</option>
+                    <option value="ST-PwD">ST PwD</option>
+                </select>
+            </div>
+            
+            <button id="predict-btn"><i class="fas fa-calculator"></i> Predict My IIT Options</button>
+            
+            <div id="loading" class="loading hidden">
+                <div class="loading-spinner"></div>
+                <p>Analyzing your rank across all 23 IITs...</p>
+            </div>
+            
+            <div id="results-container" class="results-container hidden">
+                <div class="search-container">
+                    <input type="text" id="search-iit" placeholder="Search IITs or branches...">
+                </div>
+                <h3 class="results-title">Your IIT Admission Chances</h3>
+                <div id="prediction-results"></div>
+            </div>
+            
+            <div class="brochure">
+                <h3 class="brochure-title">Admission Document Kit</h3>
+                <ul class="documents-list">
+                    <li>JEE Advanced Scorecard (Original + 2 Photocopies)</li>
+                    <li>Class 10th Marksheet and Passing Certificate</li>
+                    <li>Class 12th Marksheet and Passing Certificate</li>
+                    <li>Category Certificate (if applicable)</li>
+                    <li>Domicile Certificate (if applicable)</li>
+                    <li>Passport Size Photographs (8 copies)</li>
+                    <li>Medical Fitness Certificate</li>
+                    <li>Transfer Certificate from Last Institution</li>
+                    <li>Migration Certificate (if applicable)</li>
+                    <li>Proof of Identity (Aadhar Card/Passport/Driving License)</li>
+                    <li>Proof of Date of Birth</li>
+                    <li>Income Certificate (if applying for fee waiver)</li>
+                    <li>Character Certificate from Last Institution</li>
+                    <li>Undertaking by Candidate (as per JoSAA format)</li>
+                    <li>Anti-Ragging Affidavit (to be submitted during reporting)</li>
+                </ul>
+            </div>
+
+
+
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | IIT GENIUS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .contact-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .welcome-section {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .form-section {
+            padding: 40px;
+            background: white;
+        }
+        .form-control {
+            border-radius: 5px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+        }
+        .form-control:focus {
+            border-color: #2a5298;
+            box-shadow: 0 0 0 0.2rem rgba(42, 82, 152, 0.25);
+        }
+        .btn-send {
+            background-color: #2a5298;
+            border: none;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-send:hover {
+            background-color: #1e3c72;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<!-- Add this section to your predict.html -->
+<section class="iit-explorer-section">
+  <div class="explorer-container">
+    <h2 class="section-title">Enhance Your IIT Journey</h2>
+    <div class="content-box">
+      <p class="intro-text">
+        Combine your branch prediction with comprehensive IIT insights to make informed decisions about your engineering future. Our IIT Explorer gives you detailed information about all 23 IITs to complement your prediction results.
+      </p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Placement Stats</h3>
+          <p>Compare placement records across all IITs for your predicted branch</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏛️</div>
+          <h3>Campus Details</h3>
+          <p>Explore campus facilities, infrastructure, and unique features</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧑‍🎓</div>
+          <h3>Alumni Network</h3>
+          <p>Learn about notable alumni and their career trajectories</p>
+        </div>
+      </div>
+      <div class="cta-center">
+        <a href="iit-explorer.html" class="explore-btn pulse-animation">
+          <span>Explore IITs</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .iit-explorer-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 60px 20px;
+    border-radius: 12px;
+    margin: 40px 0;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+  
+  .explorer-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .section-title {
+    color: #2c3e50;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: #ff6b00;
+    border-radius: 2px;
+  }
+  
+  .content-box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    margin-top: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  }
+  
+  .intro-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #495057;
+    max-width: 800px;
+    margin: 0 auto 30px;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+  }
+  
+  .feature-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  }
+  
+  .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+  }
+  
+  .feature-card h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+  }
+  
+  .feature-card p {
+    color: #6c757d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .cta-center {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .explore-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 30px;
+    background-color: #ff6b00;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+    border: none;
+    cursor: pointer;
+    gap: 10px;
+    font-size: 1.1rem;
+  }
+  
+  .explore-btn:hover {
+    background-color: #242379;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 107, 0, 0.4);
+  }
+  
+  .explore-btn:active {
+    transform: translateY(0);
+  }
+  
+  .pulse-animation {
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.7); }
+    70% { box-shadow: 0 0 0 12px rgba(255, 107, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 107, 0, 0); }
+  }
+</style>
+
+
+
+
+
+<body>
+    <div class="container">
+        <div class="contact-container">
+            <div class="row g-0">
+                <div class="col-lg-5 welcome-section">
+                    <h1 class="mb-4">Welcome to IIT GENIUS</h1>
+                    <p class="mb-4">Thank you for logging in successfully. We're here to help you with any questions or concerns you may have.</p>
+                    <div class="contact-info mt-4">
+                        <p><i class="fas fa-envelope me-2"></i> contact@iitgenius.com</p>
+                        <p><i class="fas fa-phone me-2"></i> +1 (123) 456-7890</p>
+                    </div>
+                </div>
+                <div class="col-lg-7 form-section">
+                    <h2 class="mb-4">Contact Form</h2>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="4" placeholder="Your message here..." required></textarea>
+                        </div>
+                        <button type="button" class="btn btn-send text-white" onclick="sendMail()">
+                            <i class="fas fa-paper-plane me-2"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init({
+                publicKey: "Jea8R05YKTbjUjgc6",
+            });
+        })();
+    </script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="index.js"></script>
+</body>
+</html>
+ 
+
+            <div class="helpline">
+                <h3 class="helpline-title"><i class="fas fa-phone-volume"></i> Admission Helpline</h3>
+                <div class="contact-person">
+                    <span class="contact-name">Aman Joshi</span>: 8307985411
+                </div>
+    
+                <p style="margin-top: 20px; opacity: 0.9;">For any queries regarding the admission process</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2023 IIT Genius - Complete IIT Admission Prediction System</p>
+            <p>Disclaimer: Predictions are based on previous year cutoffs and are for reference only.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Check if user is logged in
+        const currentUser = sessionStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        } else {
+            document.getElementById('display-rollno').textContent = currentUser;
+        }
+        
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+        
+        // Complete IIT list with major branches
+        const allIITs = {
+            "IIT Bombay": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                          "Aerospace Engineering", "Chemical Engineering", "Civil Engineering", 
+                          "Metallurgical Engineering", "Engineering Physics"],
+            "IIT Delhi": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                         "Textile Engineering", "Chemical Engineering", "Civil Engineering", 
+                         "Biotechnology", "Mathematics and Computing"],
+            "IIT Madras": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                          "Aerospace Engineering", "Chemical Engineering", "Civil Engineering", 
+                          "Metallurgical Engineering", "Ocean Engineering"],
+            "IIT Kanpur": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                          "Aerospace Engineering", "Chemical Engineering", "Civil Engineering", 
+                          "Materials Science", "Earth Sciences"],
+            "IIT Kharagpur": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                             "Aerospace Engineering", "Chemical Engineering", "Civil Engineering", 
+                             "Metallurgical Engineering", "Mining Engineering"],
+            "IIT Roorkee": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                           "Chemical Engineering", "Civil Engineering", "Biotechnology", 
+                           "Polymer Science", "Architecture"],
+            "IIT Guwahati": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                            "Chemical Engineering", "Civil Engineering", "Design", 
+                            "Electronics", "Energy Engineering"],
+            "IIT Hyderabad": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                             "Chemical Engineering", "Civil Engineering", "Biotechnology", 
+                             "Materials Science", "AI and Data Science"],
+            "IIT Indore": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                          "Civil Engineering", "Metallurgical Engineering", "Astronomy", 
+                          "Chemistry", "Humanities"],
+            "IIT BHU (Varanasi)": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                                  "Chemical Engineering", "Civil Engineering", "Metallurgical Engineering", 
+                                  "Pharmaceutical Engineering", "Ceramic Engineering"],
+            "IIT Dhanbad": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                           "Mining Engineering", "Petroleum Engineering", "Mineral Engineering", 
+                           "Mining Machinery", "Environmental Engineering"],
+            "IIT Bhubaneswar": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                               "Civil Engineering", "Metallurgical Engineering", "Chemistry", 
+                               "Physics", "Humanities"],
+            "IIT Gandhinagar": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                               "Chemical Engineering", "Civil Engineering", "Materials Engineering", 
+                               "Biological Engineering", "Cognitive Science"],
+            "IIT Ropar": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                          "Civil Engineering", "Chemical Engineering", "Metallurgical Engineering", 
+                          "Physics", "Mathematics"],
+            "IIT Patna": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                         "Civil Engineering", "Chemical Engineering", "Metallurgical Engineering", 
+                         "Chemistry", "Mathematics"],
+            "IIT Mandi": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                         "Civil Engineering", "Engineering Physics", "Data Science", 
+                         "Bioengineering", "Advanced Materials"],
+            "IIT Jodhpur": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                           "Chemical Engineering", "Civil Engineering", "AI and Data Science", 
+                           "Bioengineering", "Smart Manufacturing"],
+            "IIT Tirupati": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                             "Civil Engineering", "Chemical Engineering", "Metallurgical Engineering", 
+                             "Physics", "Chemistry"],
+            "IIT Palakkad": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                            "Civil Engineering", "Chemical Engineering", "Materials Engineering", 
+                            "Data Science", "Humanities"],
+            "IIT Dharwad": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                           "Civil Engineering", "Chemical Engineering", "Materials Science", 
+                           "Mathematics", "Physics"],
+            "IIT Bhilai": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                          "Civil Engineering", "Chemical Engineering", "Data Science", 
+                          "Mathematics", "Physics"],
+            "IIT Goa": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                       "Mathematics and Computing", "Physics", "Chemistry", 
+                       "Humanities", "Earth Sciences"],
+            "IIT Jammu": ["Computer Science and Engineering", "Electrical Engineering", "Mechanical Engineering", 
+                         "Civil Engineering", "Chemical Engineering", "Materials Engineering", 
+                         "Mathematics", "Physics"]
+        };
+
+        // Historical cutoff data for all IITs and branches
+        const historicalCutoffs = {};
+        
+        // Generate realistic cutoff data for all IITs and branches
+        Object.keys(allIITs).forEach(iit => {
+            historicalCutoffs[iit] = {};
+            allIITs[iit].forEach(branch => {
+                historicalCutoffs[iit][branch] = {
+                    "OPEN": generateCutoffRange(100, 5000),
+                    "OBC-NCL": generateCutoffRange(200, 10000),
+                    "SC": generateCutoffRange(500, 20000),
+                    "ST": generateCutoffRange(800, 30000),
+                    "EWS": generateCutoffRange(150, 6000),
+                    "OPEN-PwD": generateCutoffRange(50, 2000),
+                    "OBC-NCL-PwD": generateCutoffRange(100, 4000),
+                    "SC-PwD": generateCutoffRange(250, 10000),
+                    "ST-PwD": generateCutoffRange(400, 15000)
+                };
+            });
+        });
+        
+        // Helper function to generate cutoff range for 5 years
+        function generateCutoffRange(min, max) {
+            const cutoffs = [];
+            for (let i = 0; i < 5; i++) {
+                cutoffs.push(Math.floor(min + Math.random() * (max - min)));
+            }
+            // Sort to make it look realistic (trending)
+            cutoffs.sort((a, b) => a - b);
+            // Add some variation
+            return cutoffs.map((val, idx) => Math.floor(val * (0.95 + (idx * 0.02))));
+        }
+        
+        // Predict functionality with backend simulation
+        document.getElementById('predict-btn').addEventListener('click', async () => {
+            const rank = parseInt(document.getElementById('jee-rank').value);
+            const category = document.getElementById('category').value;
+            
+            if (!rank || isNaN(rank)) {
+                alert('Please enter your JEE Advanced rank');
+                return;
+            }
+            
+            if (rank <= 0) {
+                alert('Please enter a valid rank');
+                return;
+            }
+            
+            // Show loading indicator
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('results-container').classList.add('hidden');
+            
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Generate predictions based on rank and category
+            const predictions = generatePredictions(rank, category);
+            
+            // Display results
+            displayPredictions(predictions, rank, category);
+            
+            // Hide loading and show results
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('results-container').classList.remove('hidden');
+            
+            // Scroll to results
+            document.getElementById('results-container').scrollIntoView({ behavior: 'smooth' });
+            
+            // Add search functionality
+            setupSearch();
+        });
+        
+        // Generate predictions based on historical data
+        function generatePredictions(rank, category) {
+            const predictions = {};
+            
+            for (const iit in historicalCutoffs) {
+                predictions[iit] = {};
+                for (const branch in historicalCutoffs[iit]) {
+                    if (historicalCutoffs[iit][branch][category]) {
+                        const avgCutoff = historicalCutoffs[iit][branch][category].reduce((a, b) => a + b, 0) / 
+                                         historicalCutoffs[iit][branch][category].length;
+                        
+                        if (rank <= avgCutoff * 0.7) {
+                            predictions[iit][branch] = "High";
+                        } else if (rank <= avgCutoff * 1.0) {
+                            predictions[iit][branch] = "Medium";
+                        } else if (rank <= avgCutoff * 1.3) {
+                            predictions[iit][branch] = "Low";
+                        } else {
+                            predictions[iit][branch] = "Unlikely";
+                        }
+                    }
+                }
+            }
+            
+            return predictions;
+        }
+        
+        // Display predictions with cutoff data
+        function displayPredictions(predictions, rank, category) {
+            const resultsContainer = document.getElementById('prediction-results');
+            resultsContainer.innerHTML = '';
+            
+            let hasResults = false;
+            
+            for (const iit in predictions) {
+                // Skip IITs where all branches are unlikely
+                if (Object.values(predictions[iit]).every(chance => chance === "Unlikely")) {
+                    continue;
+                }
+                
+                hasResults = true;
+                
+                // Create IIT card
+                const iitCard = document.createElement('div');
+                iitCard.className = 'iit-card';
+                iitCard.dataset.iitName = iit.toLowerCase();
+                
+                // Add IIT name
+                const iitName = document.createElement('div');
+                iitName.className = 'iit-name';
+                iitName.innerHTML = `
+                    <div class="iit-logo">${iit.charAt(0)}</div>
+                    ${iit}
+                `;
+                iitCard.appendChild(iitName);
+                
+                // Add branches
+                for (const branch in predictions[iit]) {
+                    if (predictions[iit][branch] === "Unlikely") continue;
+                    
+                    const branchDiv = document.createElement('div');
+                    branchDiv.className = 'branch';
+                    branchDiv.dataset.branchName = branch.toLowerCase();
+                    
+                    const branchName = document.createElement('span');
+                    branchName.className = 'branch-name';
+                    branchName.textContent = branch;
+                    
+                    const chance = document.createElement('span');
+                    chance.className = predictions[iit][branch].toLowerCase() + '-chance chance';
+                    
+                    // Set appropriate text based on prediction
+                    switch(predictions[iit][branch]) {
+                        case "High":
+                            chance.textContent = "Very Likely";
+                            break;
+                        case "Medium":
+                            chance.textContent = "Possible";
+                            break;
+                        case "Low":
+                            chance.textContent = "Borderline";
+                            break;
+                        default:
+                            chance.textContent = "Unlikely";
+                            chance.className = "low-chance chance";
+                    }
+                    
+                    branchDiv.appendChild(branchName);
+                    branchDiv.appendChild(chance);
+                    iitCard.appendChild(branchDiv);
+                    
+                    // Add cutoff data toggle
+                    const cutoffToggle = document.createElement('div');
+                    cutoffToggle.className = 'cutoff-toggle';
+                    cutoffToggle.innerHTML = `<i class="fas fa-history"></i> View historical cutoffs`;
+                    cutoffToggle.addEventListener('click', () => {
+                        toggleCutoffTable(iit, branch, category);
+                    });
+                    iitCard.appendChild(cutoffToggle);
+                    
+                    // Add cutoff table (initially hidden)
+                    const cutoffTable = document.createElement('table');
+                    cutoffTable.className = 'cutoff-table hidden';
+                    cutoffTable.id = `cutoff-${iit.replace(/\s+/g, '-')}-${branch.replace(/\s+/g, '-')}`;
+                    cutoffTable.innerHTML = `
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Opening Rank</th>
+                                <th>Closing Rank</th>
+                                <th>Your Position</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${historicalCutoffs[iit][branch][category].map((cutoff, index) => `
+                                <tr>
+                                    <td>${2023 - index}</td>
+                                    <td>${Math.floor(cutoff * 0.9)}</td>
+                                    <td>${Math.floor(cutoff * 1.1)}</td>
+                                    <td>${rank <= cutoff ? 'Within cutoff' : 'Above cutoff'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    `;
+                    iitCard.appendChild(cutoffTable);
+                }
+                
+                resultsContainer.appendChild(iitCard);
+            }
+            
+            if (!hasResults) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <p>Based on your rank and category, admission to IITs appears unlikely.</p>
+                        <p>Consider exploring other excellent engineering colleges or improvement options.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Setup search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('search-iit');
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                const iitCards = document.querySelectorAll('.iit-card');
+                let hasVisibleResults = false;
+                
+                iitCards.forEach(card => {
+                    const iitName = card.dataset.iitName;
+                    const branches = card.querySelectorAll('.branch');
+                    let hasVisibleBranches = false;
+                    
+                    // Check if IIT name matches
+                    const iitMatch = iitName.includes(searchTerm);
+                    
+                    // Check branches
+                    branches.forEach(branch => {
+                        const branchName = branch.dataset.branchName;
+                        if (branchName.includes(searchTerm) || iitMatch) {
+                            branch.style.display = 'flex';
+                            hasVisibleBranches = true;
+                        } else {
+                            branch.style.display = 'none';
+                        }
+                    });
+                    
+                    // Show/hide cutoff toggles based on visible branches
+                    const cutoffToggles = card.querySelectorAll('.cutoff-toggle');
+                    cutoffToggles.forEach(toggle => {
+                        toggle.style.display = hasVisibleBranches ? 'inline-block' : 'none';
+                    });
+                    
+                    // Show/hide IIT card based on matches
+                    if (iitMatch || hasVisibleBranches) {
+                        card.style.display = 'block';
+                        hasVisibleResults = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Show no results message if needed
+                const noResults = document.querySelector('.no-results');
+                if (noResults) {
+                    noResults.style.display = hasVisibleResults ? 'none' : 'block';
+                }
+            });
+        }
+        
+        // Toggle cutoff table visibility
+        function toggleCutoffTable(iit, branch, category) {
+            const tableId = `cutoff-${iit.replace(/\s+/g, '-')}-${branch.replace(/\s+/g, '-')}`;
+            const table = document.getElementById(tableId);
+            table.classList.toggle('hidden');
+        }
+        
+        // Email subscription
+        document.getElementById('subscribe-btn').addEventListener('click', () => {
+            const email = document.getElementById('user-email').value.trim();
+            
+            if (!email) {
+                alert('Please enter your email address');
+                return;
+            }
+            
+            // Simple email validation
+            if (!email.includes('@') || !email.includes('.')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // In a real app, this would send the email to a server
+            document.getElementById('subscription-success').classList.remove('hidden');
+            document.getElementById('user-email').value = '';
+            
+            // Simulate sending email
+            setTimeout(() => {
+                alert(`Email sent to ${email}: You have successfully subscribed to IIT Genius updates`);
+            }, 1000);
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                document.getElementById('subscription-success').classList.add('hidden');
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
